@@ -9,7 +9,9 @@ var html5QrcodeScanner = new Html5QrcodeScanner(
     "reader", { fps: 10, qrbox: 250 });
         
 function onScanSuccess(decodedText, decodedResult) {
-    document.getElementById('res').textContent = "Barcode wurde gelesen!"
+    document.getElementById('barcode').textContent = `Scan result: ${decodedText}`;
+    scannenSelected(decodedText);
+
     console.log(`Scan result: ${decodedText}`, decodedResult);
     html5QrcodeScanner.clear();
 }
@@ -17,7 +19,7 @@ function onScanSuccess(decodedText, decodedResult) {
 html5QrcodeScanner.render(onScanSuccess);
 btn.addEventListener('click', cameraClicked);
 
-async function cameraClicked() {
+async function cameraClicked() { //wird nicht mehr gebraucht
     const cameraNote = document.getElementById('cameraNote');
 
     if (!isCameraOn) {
@@ -43,10 +45,10 @@ async function cameraClicked() {
     }
 
 }
-async function scannenSelected() {
+async function scannenSelected(barcode) {
     let barcdoe = await barcodeDetector.detect(video);
     console.log(barcdoe)
-    await fetch('https://world.openfoodfacts.org/api/v0/product/6111242101180.json').then(
+    await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcdoe}.json`).then(
         (response) => {
             return response.json()
         }).then((data) => {
@@ -69,11 +71,18 @@ async function scannenSelected() {
                 }
 
                 if (haramZutat) {
+                    document.getElementById("res").textContent = 'Haram'
                     console.log('Haram')
                 }
-                else console.log('Halal')
+                else {
+                    document.getElementById("res").textContent = 'Halal'
+
+                    console.log('Halal')
+                }
 
             } catch (error) {
+                document.getElementById("res").textContent = 'Etwas ist schief gelaufen. Versuchen Sie es später erneut!';
+
                 console.log("errors")
             }
         })
