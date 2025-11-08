@@ -46,9 +46,8 @@ async function cameraClicked() { //wird nicht mehr gebraucht
 
 }
 async function scannenSelected(barcode) {
-    let barcdoe = await barcodeDetector.detect(video);
-    console.log(barcdoe)
-    await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcdoe}.json`).then(
+    
+    await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`).then(
         (response) => {
             return response.json()
         }).then((data) => {
