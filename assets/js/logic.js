@@ -1,4 +1,10 @@
 
+// start header einbinden
+fetch('header.html').then((site) => {
+    return site.text()
+}).then((html) => document.getElementById('header').innerHTML = html)
+// ende header einbinden
+
 
 let isCameraOn = false;
 let stream = null;
@@ -45,44 +51,54 @@ async function cameraClicked() { //wird nicht mehr gebraucht
     }
 
 }
-async function scannenSelected(barcode) {
-    
+
+//window.myfunction = async function scannenSelected(barcode) {
+    //barcode = 20706876;
+    async function scannenSelected(barcode) {
     await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`).then(
         (response) => {
             return response.json()
         }).then((data) => {
             try {
+
                 let product = data.product;
                 let haramZutat = null;
 
                 let zutaten = product.ingredients_text_de
                     || product.ingredients_text
-                    || product.ingredients_text_en
-                    || "";
+                    || product.ingredients_text_en;
+
+                let result = '';
 
                 if (zutaten) {
                     let zutatenListe = zutaten.split(',').map(z => z.trim()).map(z => z.toLowerCase());
                     haramZutat = checkZutaten(zutatenListe)
                 }
 
-                if (!haramZutat && product._keywords) {
+                /*if (!haramZutat && product._keywords) {
                     haramZutat = checkZutaten(product._keywords);
-                }
+                }*/
 
                 if (haramZutat) {
-                    document.getElementById("res").textContent = 'Haram'
-                    console.log('Haram')
+                    //document.getElementById("res").textContent = 'Haram'
+                    result = ['Haram', zutaten, barcode, haramZutat]
+                }
+                else if(!zutaten){
+                    result = ['null', 'null', barcode]
+
                 }
                 else {
-                    document.getElementById("res").textContent = 'Halal'
-
-                    console.log('Halal')
+                    //document.getElementById("res").textContent = 'Halal'
+                    result = ['Halal',zutaten, barcode]
                 }
+                localStorage.setItem('result',JSON.stringify(result))
+                localStorage.setItem('data', JSON.stringify(data))
+                window.location.href =`result.html`
 
             } catch (error) {
                 document.getElementById("res").textContent = 'Etwas ist schief gelaufen. Versuchen Sie es später erneut!';
 
-                console.log("errors")
+                console.log(error)
             }
         })
 }
