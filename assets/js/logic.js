@@ -1,9 +1,4 @@
 
-// start header einbinden
-fetch('header.html').then((site) => {
-    return site.text()
-}).then((html) => document.getElementById('header').innerHTML = html)
-// ende header einbinden
 
 
 let isCameraOn = false;
@@ -15,7 +10,7 @@ var html5QrcodeScanner = new Html5QrcodeScanner(
     "reader", { fps: 10, qrbox: 250 });
         
 function onScanSuccess(decodedText, decodedResult) {
-    document.getElementById('barcode').textContent = `Scan result: ${decodedText}`;
+    document.getElementById('reader').textContent = decodedText
     scannenSelected(decodedText);
 
     console.log(`Scan result: ${decodedText}`, decodedResult);
@@ -23,8 +18,8 @@ function onScanSuccess(decodedText, decodedResult) {
 }
 
 html5QrcodeScanner.render(onScanSuccess);
-btn.addEventListener('click', cameraClicked);
-
+//btn.addEventListener('click', cameraClicked);
+/*
 async function cameraClicked() { //wird nicht mehr gebraucht
     const cameraNote = document.getElementById('cameraNote');
 
@@ -51,10 +46,13 @@ async function cameraClicked() { //wird nicht mehr gebraucht
     }
 
 }
-
+*/
 //window.myfunction = async function scannenSelected(barcode) {
-    //barcode = 20706876;
     async function scannenSelected(barcode) {
+        console.log(`Scan result:`);
+
+        barcode = 20706876;
+
     await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`).then(
         (response) => {
             return response.json()
