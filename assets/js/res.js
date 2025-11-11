@@ -42,7 +42,7 @@ console.log(data.product)
 localStorage.clear()
 
 
-document.getElementById('returnBtn').addEventListener(('click'), home);
+document.getElementsByClassName('returnBtn').addEventListener(('click'), home);
 
 function home(){
     window.location.href = 'index.html';
