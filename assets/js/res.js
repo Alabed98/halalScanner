@@ -42,7 +42,11 @@ console.log(data.product)
 localStorage.clear()
 
 
-document.getElementsByClassName('returnBtn').addEventListener(('click'), home);
+const buttons = document.getElementsByClassName('returnBtn')
+
+for(let btn of buttons){
+    btn.addEventListener(('click'), home);
+}
 
 function home(){
     window.location.href = 'index.html';
