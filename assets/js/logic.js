@@ -51,7 +51,7 @@ async function cameraClicked() { //wird nicht mehr gebraucht
     async function scannenSelected(barcode) {
         console.log(`Scan result:`);
 
-        barcode = 20706876;
+        //barcode = 20706876;
 
     await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`).then(
         (response) => {
