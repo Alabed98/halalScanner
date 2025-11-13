@@ -22,7 +22,7 @@ if(resultText[0] === 'Haram'){
     document.getElementById('resContent').style.background = '#f2003c';
     document.getElementById('resIcon').src = "./assets/images/kreuz.png";
     document.getElementById('warnung').style.display = 'block';
-    document.getElementById('reason').textContent = resultText[4]
+    document.getElementById('reason').textContent = `Das Produkt enthält folgende Zutaten, die Haram oder kritisch sind: ${resultText[4]}`
                 
 }
 
