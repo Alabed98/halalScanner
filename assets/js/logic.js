@@ -1,71 +1,30 @@
-
-
-
 let isCameraOn = false;
 let stream = null;
 const camera = document.getElementById('camera');
 const btn = document.getElementById('btn');
+var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
 
-var html5QrcodeScanner = new Html5QrcodeScanner(
-    "reader", { fps: 10, qrbox: 250 });
-        
-function onScanSuccess(decodedText, decodedResult) {
+function onScanSuccess(decodedText) {
     document.getElementById('reader').textContent = decodedText
     scannenSelected(decodedText);
-
-    console.log(`Scan result: ${decodedText}`, decodedResult);
     html5QrcodeScanner.clear();
 }
 
 html5QrcodeScanner.render(onScanSuccess);
-//btn.addEventListener('click', cameraClicked);
-/*
-async function cameraClicked() { //wird nicht mehr gebraucht
-    const cameraNote = document.getElementById('cameraNote');
 
-    if (!isCameraOn) {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        camera.style.display = 'block';
-        cameraNote.style.display = 'none';
-        camera.srcObject = stream;
-        btn.textContent = 'Kamera schließen';
-        isCameraOn = true;
-        scannenSelected();
-    }
-    else {
-        if(stream){
-            camera.srcObject = null;
-            stream.getTracks().forEach(track => track.stop())
-            stream = null;
-        }
-
-        isCameraOn = false;
-        btn.textContent = 'Kamera starten';
-        camera.style.display = 'none';
-        cameraNote.style.display = 'block';
-    }
-
-}
-*/
-//window.myfunction = async function scannenSelected(barcode) {
-    async function scannenSelected(barcode) {
-        console.log(`Scan result:`);
-
-        //barcode = 20706876;
+async function scannenSelected(barcode) {
+    barcode = 5410041066005;
 
     await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`).then(
         (response) => {
             return response.json()
         }).then((data) => {
             try {
-
                 let product = data.product;
                 let haramZutat = null;
-
                 let zutaten = product.ingredients_text_de
                     || product.ingredients_text
                     || product.ingredients_text_en;
-
                 let result = '';
 
                 if (zutaten) {
@@ -73,25 +32,18 @@ async function cameraClicked() { //wird nicht mehr gebraucht
                     haramZutat = checkZutaten(zutatenListe)
                 }
 
-                /*if (!haramZutat && product._keywords) {
-                    haramZutat = checkZutaten(product._keywords);
-                }*/
-
                 if (haramZutat) {
-                    //document.getElementById("res").textContent = 'Haram'
                     result = ['Haram', zutaten, barcode, haramZutat]
                 }
-                else if(!zutaten){
+                else if (!zutaten) {
                     result = ['null', 'null', barcode]
-
                 }
                 else {
-                    //document.getElementById("res").textContent = 'Halal'
-                    result = ['Halal',zutaten, barcode]
+                    result = ['Halal', zutaten, barcode]
                 }
-                localStorage.setItem('result',JSON.stringify(result))
+                localStorage.setItem('result', JSON.stringify(result))
                 localStorage.setItem('data', JSON.stringify(data))
-                window.location.href =`result.html`
+                window.location.href = `result.html`
 
             } catch (error) {
                 document.getElementById("res").textContent = 'Etwas ist schief gelaufen. Versuchen Sie es später erneut!';
