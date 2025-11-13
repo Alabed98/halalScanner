@@ -1,3 +1,10 @@
+window.addEventListener('load', () => {
+    const navEntries = performance.getEntriesByType('navigation');
+    if(navEntries[0].type === "reload"){
+        window.location.href="index.html";  
+    }
+})
+
 const resultText = JSON.parse(localStorage.getItem('result'));
 console.log(resultText)
 if(resultText[0] === 'Halal'){
@@ -37,17 +44,12 @@ document.getElementById('zutaten').textContent = data.product.ingredients_text
 
 localStorage.clear()
 
-
 const buttons = document.getElementsByClassName('returnBtn')
 
 for(let btn of buttons){
-    btn.addEventListener(('click'), home);
+    btn.addEventListener(('click'), () => {
+        window.location.href = 'index.html';
+
+    });
 }
 
-function home(){
-    window.location.href = 'index.html';
-}
-
-window.addEventListener('load', () => {
-    window.location.href="index.html";
-})
