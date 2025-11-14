@@ -13,7 +13,6 @@ function onScanSuccess(decodedText) {
 html5QrcodeScanner.render(onScanSuccess);
 
 async function scannenSelected(barcode) {
-    barcode = 5410041066005;
 
     await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`).then(
         (response) => {
